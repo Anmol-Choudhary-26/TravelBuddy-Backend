@@ -1,58 +1,83 @@
 import express from 'express';
 const router = express.Router();
-import {PrismaCLient} from '@prisma/client'
+import { PrismaClient } from '@prisma/client';
 
+const prisma = new PrismaClient()
 // Create a new user
-async function createUser(email, phoneNumber, FullName, Password) {
+router.post('/', async (req, res) => {
+  try {
     const user = await prisma.user.create({
-      data: {
-        email,
-        phoneNumber,
-        FullName,
-        Password,
-      },
+      data: req.body,
     });
-  
-    return user;
+
+    res.status(200).json(user);
   }
-  
-  // Get all users
-  async function getAllUsers() {
+  catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Failed to post user.' })
+  }
+}
+)
+
+// Get all users
+router.get('/allusers', async (req, res) => {
+  try {
     const users = await prisma.user.findMany();
-  
-    return users;
+
+    res.status(200).json(users);
   }
-  
-  // Get a single user by ID
-  async function getUserById(id) {
+  catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Failed to get all users.' })
+  }
+})
+
+// Get a single user by ID
+router.get('/:id?', async (req, res) => {
+  try {
+    const { id } = req.query
     const user = await prisma.user.findUnique({
       where: { id },
     });
-  
-    return user;
+
+    res.status(200).json(user);
   }
-  
-  // Update a user by ID
-  async function updateUserById(id, email, phoneNumber, FullName, Password, shortBio, Address, block) {
+  catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Failed to get user.' })
+  }
+})
+
+// Update a user by ID
+router.put('/:id?', async (req, res) => {
+  try {
+    const { id } = req.query
     const user = await prisma.user.update({
       where: { id },
-      data: {
-        email,
-        phoneNumber,
-        FullName,
-        Password,
-        shortBio,
-        Address,
-        block,
-      },
+      data: req.body
     });
-  
-    return user;
+
+    res.status(201).json(user);
   }
-  
-  // Delete a user by ID
-  async function deleteUserById(id) {
+  catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Failed to update user.' })
+  }
+})
+
+// Delete a user by ID
+router.delete('/:id?', async (req, res) => {
+  try {
+    const { id } = req.query
     await prisma.user.delete({
       where: { id },
     });
+    res.status(204).json("User deleted")
   }
+  catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Failed to delete user.' })
+  }
+})
+
+export default router;
