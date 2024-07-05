@@ -3,6 +3,7 @@ import serveIndex from 'serve-index';
 import { MongoClient, ServerApiVersion } from 'mongodb';
 const app = express();
 import usersRouter from './controllers/userController.js';
+import postRouter from './controllers/postController.js';
 import dotenv from 'dotenv'
 dotenv.config()
 import cors from 'cors'
@@ -28,5 +29,6 @@ app.use('/public', serveIndex('public'));
 
 // Routes
 app.use("/user", usersRouter);
+app.use("/post", postRouter);
 
-app.listen(3000, () => console.log('app is listening on port 3000.'));
+app.listen(8000, () => console.log('app is listening on port 8000.'));

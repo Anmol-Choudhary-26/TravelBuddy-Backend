@@ -3,28 +3,28 @@ const router = express.Router();
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient()
-// Create a new user
+// Create a new post
 router.post('/', async (req, res) => {
   try {
-    const user = await prisma.user.create({
+    const post = await prisma.post.create({
       data: req.body,
     });
 
-    res.status(200).json(user);
+    res.status(200).json(post);
   }
   catch (error) {
     console.log(error);
-    res.status(500).json({ message: 'Failed to post user.' })
+    res.status(500).json({ message: 'Failed to post post.' })
   }
 }
 )
 
-// Get all users
-router.get('/allusers', async (req, res) => {
+// Get all posts
+router.get('/allpost', async (req, res) => {
   try {
-    const users = await prisma.user.findMany();
+    const posts = await prisma.post.findMany();
 
-    res.status(200).json(users);
+    res.status(200).json(posts);
   }
   catch (error) {
     console.log(error);
@@ -32,33 +32,33 @@ router.get('/allusers', async (req, res) => {
   }
 })
 
-// Get a single user by ID
+// Get a single post by ID
 router.get('/:id?', async (req, res) => {
   try {
-    const { id } = req.query
-    const user = await prisma.user.findUnique({
+    const { id } = req.params
+    const post = await prisma.post.findUnique({
       where: { id },
     });
 
-    res.status(200).json(user);
+    res.status(200).json(post);
   }
   catch (error) {
     console.log(error);
-    res.status(500).json({ message: 'Failed to get user.' })
+    res.status(500).json({ message: 'Failed to get post.' })
   }
 })
 
-// Update a user by ID
+// Update a post by ID
 router.put('/:id?', async (req, res) => {
   try {
     const { id } = req.params
     console.log(id);
-    const user = await prisma.user.update({
+    const post = await prisma.post.update({
       where: { id },
       data: req.body
     });
 
-    res.status(201).json(user);
+    res.status(201).json(post);
   }
   catch (error) {
     console.log(error);
@@ -66,18 +66,18 @@ router.put('/:id?', async (req, res) => {
   }
 })
 
-// Delete a user by ID
+// Delete a post by ID
 router.delete('/:id?', async (req, res) => {
   try {
-    const { id } = req.query
-    await prisma.user.delete({
+    const { id } = req.params
+    await prisma.post.delete({
       where: { id },
     });
-    res.status(204).json("User deleted")
+    res.status(204).json("post deleted")
   }
   catch (error) {
     console.log(error);
-    res.status(500).json({ message: 'Failed to delete user.' })
+    res.status(500).json({ message: 'Failed to delete post.' })
   }
 })
 

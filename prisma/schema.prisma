@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "mongodb"
-  url      = env("Mongo_Url")
+  url      = env("MONGO_URL")
 }
 
 model User {
@@ -12,6 +12,7 @@ model User {
   email       String
   phoneNumber String
   FullName    String
+  UserName    String
   Password    String
   shortBio    String?
   Address     String?
@@ -27,8 +28,9 @@ model Post {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   location  String
   caption   String
-  date      DateTime
+  date      DateTime @db.Date
   imageUrl  String
+  authorName String
   authorId  String   @db.ObjectId
   author    User     @relation(fields: [authorId], references: [id])
   replies   Reply[]
