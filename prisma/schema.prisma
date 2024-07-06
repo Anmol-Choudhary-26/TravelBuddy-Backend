@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String          @id @default(auto()) @map("_id") @db.ObjectId
   email       String
   phoneNumber String
   FullName    String
@@ -16,27 +16,29 @@ model User {
   Password    String
   shortBio    String?
   Address     String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  block       Boolean  @default(false)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  block       Boolean         @default(false)
   posts       Post[]
+  chatRooms   chatRoomUsers[]
+  msg         msg[]
   replies     Reply[]
   likedPost   Like[]
 }
 
 model Post {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  location  String
-  caption   String
-  date      DateTime @db.Date
-  imageUrl  String
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  location   String
+  caption    String
+  date       DateTime @db.Date
+  imageUrl   String
   authorName String
-  authorId  String   @db.ObjectId
-  author    User     @relation(fields: [authorId], references: [id])
-  replies   Reply[]
-  likes     Like[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  authorId   String   @db.ObjectId
+  author     User     @relation(fields: [authorId], references: [id])
+  replies    Reply[]
+  likes      Like[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 model Reply {
@@ -57,4 +59,35 @@ model Like {
   postId    String   @db.ObjectId
   post      Post     @relation(fields: [postId], references: [id])
   createdAt DateTime @default(now())
+}
+
+model chatRoom {
+  id        String          @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  users     chatRoomUsers[]
+  message   msg[]
+}
+
+model msg {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  message    String
+  chatRoom   chatRoom @relation(fields: [chatRoomId], references: [id])
+  chatRoomId String   @db.ObjectId
+  userId     String   @db.ObjectId
+  user       User     @relation(fields: [userId], references: [id])
+  time       DateTime @default(now())
+  received   Boolean  @default(false)
+}
+
+model chatRoomUsers {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  chatRoomId String   @db.ObjectId
+  chatRoom   chatRoom @relation(fields: [chatRoomId], references: [id])
+  userId     String   @db.ObjectId
+  user       User     @relation(fields: [userId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([chatRoomId, userId])
 }

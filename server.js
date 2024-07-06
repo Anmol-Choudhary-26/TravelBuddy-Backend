@@ -4,6 +4,7 @@ import { MongoClient, ServerApiVersion } from 'mongodb';
 const app = express();
 import usersRouter from './controllers/userController.js';
 import postRouter from './controllers/postController.js';
+import chatRouter from './controllers/chatControllers.js';
 import dotenv from 'dotenv'
 dotenv.config()
 import cors from 'cors'
@@ -30,5 +31,6 @@ app.use('/public', serveIndex('public'));
 // Routes
 app.use("/user", usersRouter);
 app.use("/post", postRouter);
+app.use('/chat', chatRouter);
 
 app.listen(8000, () => console.log('app is listening on port 8000.'));
