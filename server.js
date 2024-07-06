@@ -9,7 +9,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 import cors from 'cors'
 const corsOptions = {
-    origin: "*",
+    origin: 'https://travelbudddyy.netlify.app',
     credentials: true,
     optionsSuccessStatus: 200,
 }
