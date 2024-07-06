@@ -28,11 +28,8 @@ app.use((req, res, next) => {
     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     next();
   });
-app.use(cors())
+
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use('/public', express.static('public'));
-app.use('/public', serveIndex('public'));
 
 
 // Routes
