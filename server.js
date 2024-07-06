@@ -8,11 +8,7 @@ import chatRouter from './controllers/chatControllers.js';
 import dotenv from 'dotenv'
 dotenv.config()
 import cors from 'cors'
-const corsOptions = {
-    origin: 'https://travelbudy.netlify.app',
-    credentials: true,
-    optionsSuccessStatus: 200,
-}
+
 // connected to database
 const client = new MongoClient(
     process.env.MONGO_URL,
@@ -26,7 +22,7 @@ const client = new MongoClient(
 );
 
 // middleware
-app.use(cors(corsOptions))
+app.use(cors())
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use('/public', express.static('public'));
