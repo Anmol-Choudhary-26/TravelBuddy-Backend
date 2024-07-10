@@ -1,11 +1,7 @@
 import express from 'express';
-const { PrismaClient } = require('@prisma/client')
-
 const router = express.Router();
-router.use(express.json())
-
-const prisma = new PrismaClient()
-
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();
 // Create a bookmark
 router.post('/bookmarks', async (req, res) => {
   const { postId, userId } = req.body
