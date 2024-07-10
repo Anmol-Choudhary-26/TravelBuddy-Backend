@@ -1,13 +1,13 @@
 import express from 'express';
 const { PrismaClient } = require('@prisma/client')
 
-const app = express()
-app.use(express.json())
+const router = express.Router();
+router.use(express.json())
 
 const prisma = new PrismaClient()
 
 // Create a bookmark
-app.post('/bookmarks', async (req, res) => {
+router.post('/bookmarks', async (req, res) => {
   const { postId, userId } = req.body
 
   try {
@@ -25,7 +25,7 @@ app.post('/bookmarks', async (req, res) => {
 })
 
 // Read all bookmarks
-app.get('/bookmarks', async (req, res) => {
+router.get('/bookmarks', async (req, res) => {
   try {
     const bookmarks = await prisma.bookmark.findMany()
 
@@ -36,7 +36,7 @@ app.get('/bookmarks', async (req, res) => {
 })
 
 // Read a single bookmark
-app.get('/bookmarks/:id', async (req, res) => {
+router.get('/bookmarks/:id', async (req, res) => {
   const { id } = req.params
 
   try {
@@ -55,7 +55,7 @@ app.get('/bookmarks/:id', async (req, res) => {
 })
 
 // Update a bookmark
-app.put('/bookmarks/:id', async (req, res) => {
+router.put('/bookmarks/:id', async (req, res) => {
   const { id } = req.params
   const { postId, userId } = req.body
 
@@ -75,7 +75,7 @@ app.put('/bookmarks/:id', async (req, res) => {
 })
 
 // Delete a bookmark
-app.delete('/bookmarks/:id', async (req, res) => {
+router.delete('/bookmarks/:id', async (req, res) => {
   const { id } = req.params
 
   try {
@@ -90,6 +90,8 @@ app.delete('/bookmarks/:id', async (req, res) => {
 })
 
 const PORT = process.env.PORT || 3000
-app.listen(PORT, () => {
+router.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`)
 })
+
+export default router;
