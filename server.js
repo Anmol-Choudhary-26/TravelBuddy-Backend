@@ -21,6 +21,7 @@ const client = new MongoClient(
 );
 
 // middleware
+app.use(express.json());
   app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
@@ -28,7 +29,6 @@ const client = new MongoClient(
     next();
   });
 
-app.use(express.json());
 
 
 // Routes
