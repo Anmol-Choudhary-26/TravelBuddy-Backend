@@ -1,5 +1,4 @@
 import express from 'express';
-import serveIndex from 'serve-index';
 import { MongoClient, ServerApiVersion } from 'mongodb';
 const app = express();
 import usersRouter from './controllers/userController.js';
@@ -8,7 +7,6 @@ import chatRouter from './controllers/chatControllers.js';
 import bookmarkRouter from './controllers/bookmarkControllers.js';
 import dotenv from 'dotenv'
 dotenv.config()
-import cors from 'cors'
 
 // connected to database
 const client = new MongoClient(
@@ -23,10 +21,10 @@ const client = new MongoClient(
 );
 
 // middleware
-app.use((req, res, next) => {
+  app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     next();
   });
 
