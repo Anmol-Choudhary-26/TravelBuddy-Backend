@@ -5,6 +5,7 @@ const app = express();
 import usersRouter from './controllers/userController.js';
 import postRouter from './controllers/postController.js';
 import chatRouter from './controllers/chatControllers.js';
+import bookmarkRouter from './controllers/bookmarkControllers.js';
 import dotenv from 'dotenv'
 dotenv.config()
 import cors from 'cors'
@@ -36,5 +37,6 @@ app.use(express.json());
 app.use("/user", usersRouter);
 app.use("/post", postRouter);
 app.use('/chat', chatRouter);
+app.use('/bookmark', bookmarkRouter);
 
 app.listen(8000, () => console.log('app is listening on port 8000.'));

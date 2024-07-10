@@ -22,6 +22,7 @@ model User {
   posts       Post[]
   chatRooms   chatRoomUsers[]
   msg         msg[]
+  bookmarks Bookmark[]
   replies     Reply[]
   likedPost   Like[]
 }
@@ -36,6 +37,7 @@ model Post {
   authorId   String   @db.ObjectId
   author     User     @relation(fields: [authorId], references: [id])
   replies    Reply[]
+  bookmarks Bookmark[]
   likes      Like[]
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
@@ -59,6 +61,14 @@ model Like {
   postId    String   @db.ObjectId
   post      Post     @relation(fields: [postId], references: [id])
   createdAt DateTime @default(now())
+}
+
+model Bookmark {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  post   Post   @relation(fields: [postId], references: [id])
+  postId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @db.ObjectId
 }
 
 model chatRoom {
