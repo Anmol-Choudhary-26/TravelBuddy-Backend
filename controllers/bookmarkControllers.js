@@ -85,9 +85,5 @@ router.delete('/bookmarks/:id', async (req, res) => {
   }
 })
 
-const PORT = process.env.PORT || 3000
-router.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`)
-})
 
 export default router;
