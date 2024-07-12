@@ -31,6 +31,31 @@ router.get('/allpost', async (req, res) => {
   }
 })
 
+router.get('/search', async (req, res) => {
+  try {
+     const {startDate, endDate, caption} = req.query;
+     const formattedstart = startDate ? startDate : '1999-01-01'
+     const formattedend = endDate? endDate : '2100-12-31'
+     console.log(caption);
+      const posts = await prisma.post.findMany({
+        where: {
+          caption: {
+              contains: caption,
+          },
+          createdAt: {
+            gte: `${formattedstart}T00:00:00z`,
+            lt: `${formattedend}T00:00:00z`,
+        },
+        }
+      });
+
+      res.status(200).json(posts);
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 // Get a single post by ID
 router.get('/:id?', async (req, res) => {
   try {
@@ -79,5 +104,7 @@ router.delete('/:id?', async (req, res) => {
     res.status(500).json({ message: 'Failed to delete post.' })
   }
 })
+
+
 
 export default router;

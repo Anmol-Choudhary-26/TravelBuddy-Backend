@@ -3,7 +3,7 @@ const router = express.Router();
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 // Create a bookmark
-router.post('/bookmarks', async (req, res) => {
+router.post('/', async (req, res) => {
   const { postId, userId } = req.body
 
   try {
@@ -21,37 +21,30 @@ router.post('/bookmarks', async (req, res) => {
 })
 
 // Read all bookmarks
-router.get('/bookmarks', async (req, res) => {
+router.get('/getbookmark', async (req, res) => {
   try {
-    const bookmarks = await prisma.bookmark.findMany()
+    const { userId } = req.params;
 
-    res.json(bookmarks)
+    const bookmarks = await prisma.bookmark.findMany({
+      where: {
+        userId,
+      },
+      include: {
+        post: true,
+      },
+    });
+
+    const posts = bookmarks.map((bookmark) => bookmark.post);
+
+    res.status(200).json(posts);
   } catch (error) {
-    res.status(500).json({ error: error.message })
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
   }
-})
-
-// Read a single bookmark
-router.get('/bookmarks/:id', async (req, res) => {
-  const { id } = req.params
-
-  try {
-    const bookmark = await prisma.bookmark.findUnique({
-      where: { id },
-    })
-
-    if (!bookmark) {
-      return res.status(404).json({ error: 'Bookmark not found' })
-    }
-
-    res.json(bookmark)
-  } catch (error) {
-    res.status(500).json({ error: error.message })
-  }
-})
+});
 
 // Update a bookmark
-router.put('/bookmarks/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {
   const { id } = req.params
   const { postId, userId } = req.body
 
@@ -71,7 +64,7 @@ router.put('/bookmarks/:id', async (req, res) => {
 })
 
 // Delete a bookmark
-router.delete('/bookmarks/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   const { id } = req.params
 
   try {
