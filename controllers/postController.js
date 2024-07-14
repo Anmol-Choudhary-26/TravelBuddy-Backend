@@ -56,6 +56,19 @@ router.get('/search', async (req, res) => {
   }
 });
 
+router.get('/recent', async (req, res) => {
+  try {
+    const posts = await prisma.post.findMany({
+      orderBy: { createdAt: 'desc' },
+    });
+
+    res.status(200).json(posts);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json(error);
+  }
+});
+
 // Get a single post by ID
 router.get('/:id?', async (req, res) => {
   try {
