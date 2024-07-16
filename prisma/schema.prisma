@@ -8,39 +8,44 @@ datasource db {
 }
 
 model User {
-  id          String          @id @default(auto()) @map("_id") @db.ObjectId
-  email       String
-  phoneNumber String
-  FullName    String
-  UserName    String
-  Password    String
-  shortBio    String?
-  Address     String?
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
-  block       Boolean         @default(false)
-  posts       Post[]
-  chatRooms   chatRoomUsers[]
-  msg         msg[]
-  bookmarks Bookmark[]
-  replies     Reply[]
-  likedPost   Like[]
+  id               String          @id @default(auto()) @map("_id") @db.ObjectId
+  email            String
+  phoneNumber      String
+  FullName         String
+  UserName         String
+  Password         String
+  dob              DateTime?
+  gender           String?
+  bio              String?
+  emergencyContact String?
+  profilePic       String?
+  shortBio         String?
+  Address          String?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  block            Boolean         @default(false)
+  posts            Post[]
+  chatRooms        chatRoomUsers[]
+  msg              msg[]
+  bookmarks        Bookmark[]
+  replies          Reply[]
+  likedPost        Like[]
 }
 
 model Post {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  id         String     @id @default(auto()) @map("_id") @db.ObjectId
   location   String
   caption    String
-  date       DateTime @db.Date
+  date       DateTime   @db.Date
   imageUrl   String
   authorName String
-  authorId   String   @db.ObjectId
-  author     User     @relation(fields: [authorId], references: [id])
+  authorId   String     @db.ObjectId
+  author     User       @relation(fields: [authorId], references: [id])
   replies    Reply[]
-  bookmarks Bookmark[]
+  bookmarks  Bookmark[]
   likes      Like[]
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
 }
 
 model Reply {
@@ -64,7 +69,7 @@ model Like {
 }
 
 model Bookmark {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
   post   Post   @relation(fields: [postId], references: [id])
   postId String @db.ObjectId
   user   User   @relation(fields: [userId], references: [id])
