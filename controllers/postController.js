@@ -121,9 +121,8 @@ router.delete('/:id?', async (req, res) => {
 // Add a new route to like a post
 router.post('/like/:id?', async (req, res) => {
   try {
-    const { id } = req.params;
-    const { userId } = req.body; // Assuming the user's ID is passed in the request body
-
+    const { id, userId } = req.params;
+   
     // Check if the user has already liked the post
     const existingLike = await prisma.like.findFirst({
       where: {
