@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 // Delete or create a bookmark
 router.post('/', async (req, res) => {
  
-  const { postId, userId } = req.query;
+  const { postId, userId } = req.params;
 
   try {
     // Check if a bookmark exists for the given postId and userId

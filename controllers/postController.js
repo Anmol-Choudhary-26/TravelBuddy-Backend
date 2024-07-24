@@ -34,7 +34,7 @@ router.get('/allpost', async (req, res) => {
 router.post('/like/:id?', async (req, res) => {
   try {
     
-    const { id, userId } = req.query;
+    const { id, userId } = req.params;
     
     // Check if the user has already liked the post
     const existingLike = await prisma.like.findFirst({
