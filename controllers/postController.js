@@ -31,6 +31,45 @@ router.get('/allpost', async (req, res) => {
   }
 })
 
+router.post('/like/:id?', async (req, res) => {
+  try {
+    const { id, userId } = req.params;
+   
+    // Check if the user has already liked the post
+    const existingLike = await prisma.like.findFirst({
+      where: {
+        postId: id,
+        userId: userId,
+      },
+    });
+
+    if (existingLike) {
+      // If the user has already liked the post, delete the like
+      await prisma.like.delete({
+        where: { id: existingLike.id },
+      });
+    } else {
+      // If the user has not liked the post, create a new like
+      await prisma.like.create({
+        data: {
+          postId: id,
+          userId: userId,
+        },
+      });
+    }
+
+    // Get the updated number of likes for the post
+    const likesCount = await prisma.like.count({
+      where: { postId: id },
+    });
+
+    res.status(200).json({ likesCount });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error });
+  }
+});
+
 router.get('/search', async (req, res) => {
   try {
      const {startDate, endDate, caption} = req.query;
@@ -119,46 +158,9 @@ router.delete('/:id?', async (req, res) => {
 })
 
 // Add a new route to like a post
-router.post('/like/:id?', async (req, res) => {
-  try {
-    const { id, userId } = req.params;
-   
-    // Check if the user has already liked the post
-    const existingLike = await prisma.like.findFirst({
-      where: {
-        postId: id,
-        userId: userId,
-      },
-    });
 
-    if (existingLike) {
-      // If the user has already liked the post, delete the like
-      await prisma.like.delete({
-        where: { id: existingLike.id },
-      });
-    } else {
-      // If the user has not liked the post, create a new like
-      await prisma.like.create({
-        data: {
-          postId: id,
-          userId: userId,
-        },
-      });
-    }
 
-    // Get the updated number of likes for the post
-    const likesCount = await prisma.like.count({
-      where: { postId: id },
-    });
-
-    res.status(200).json({ likesCount });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
-});
-
-router.post('/like/:id?', async (req, res) => {
+router.get('/like/:id?', async (req, res) => {
   try{
     // Get the updated number of likes for the post
     const likesCount = await prisma.like.count({
