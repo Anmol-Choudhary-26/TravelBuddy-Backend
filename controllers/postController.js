@@ -33,8 +33,9 @@ router.get('/allpost', async (req, res) => {
 
 router.post('/like/:id?', async (req, res) => {
   try {
-    const { id, userId } = req.params;
-   
+    
+    const { id, userId } = req.query;
+    
     // Check if the user has already liked the post
     const existingLike = await prisma.like.findFirst({
       where: {
@@ -47,7 +48,7 @@ router.post('/like/:id?', async (req, res) => {
       // If the user has already liked the post, delete the like
       await prisma.like.delete({
         where: { id: existingLike.id },
-      });
+      })
     } else {
       // If the user has not liked the post, create a new like
       await prisma.like.create({
