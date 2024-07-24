@@ -2,23 +2,39 @@ import express from 'express';
 const router = express.Router();
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
-// Create a bookmark
+
+// Delete or create a bookmark
 router.post('/', async (req, res) => {
-  const { postId, userId } = req.body
+ 
+  const { postId, userId } = req.query;
 
   try {
-    const bookmark = await prisma.bookmark.create({
-      data: {
-        postId,
-        userId,
-      },
-    })
+    // Check if a bookmark exists for the given postId and userId
+    const existingBookmark = await prisma.bookmark.findFirst({
+      where: { postId, userId },
+    });
 
-    res.status(201).json(bookmark)
+    if (existingBookmark) {
+      // If a bookmark exists, delete it
+      await prisma.bookmark.delete({
+        where: { id: existingBookmark.id },
+      });
+    } else {
+      // If no bookmark exists, create a new one
+      const newBookmark = await prisma.bookmark.create({
+        data: {
+          postId,
+          userId,
+        },
+      });
+    }
+
+    res.status(200).json({ message: 'Bookmark updated successfully' });
   } catch (error) {
-    res.status(400).json({ error: error.message })
+    res.status(500).json({ error });
   }
-})
+});
+
 
 // Read all bookmarks
 router.get('/getbookmark', async (req, res) => {
