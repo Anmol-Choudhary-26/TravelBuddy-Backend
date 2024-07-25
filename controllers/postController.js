@@ -53,15 +53,15 @@ router.post('/like/', async (req, res) => {
       // If the user has not liked the post, create a new like
       await prisma.like.create({
         data: {
-          postId: id,
-          userId: userId,
+          postId,
+          userId,
         },
       });
     }
 
     // Get the updated number of likes for the post
     const likesCount = await prisma.like.count({
-      where: { postId: id },
+      where: { postId },
     });
 
     res.status(200).json({ likesCount });
