@@ -13,7 +13,6 @@ model User {
   phoneNumber      String
   FullName         String
   UserName         String
-  Password         String
   dob              DateTime?
   gender           String?
   bio              String?
