@@ -31,7 +31,7 @@ router.get('/allpost', async (req, res) => {
   }
 })
 
-router.post('/like/:id?', async (req, res) => {
+router.post('/like/', async (req, res) => {
   try {
     
     const { id, userId } = req.params;
