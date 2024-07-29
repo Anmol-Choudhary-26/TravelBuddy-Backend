@@ -56,7 +56,7 @@ router.get('/allpost', async (req, res) => {
   }
 });
 
-router.post('/like/', async (req, res) => {
+router.post('/like', async (req, res) => {
   try {
     console.log(req.body)
     const { postId, userId } = req.body;
