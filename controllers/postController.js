@@ -19,17 +19,42 @@ router.post('/', async (req, res) => {
 )
 
 // Get all posts
+// router.get('/allpost', async (req, res) => {
+//   try {
+//     const posts = await prisma.post.findMany();
+
+//     res.status(200).json(posts);
+//   }
+//   catch (error) {
+//     console.log(error);
+//     res.status(500).json({ message: error })
+//   }
+// })
+
 router.get('/allpost', async (req, res) => {
   try {
-    const posts = await prisma.post.findMany();
+    const posts = await prisma.post.findMany({
+      include: {
+        likes: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
 
-    res.status(200).json(posts);
-  }
-  catch (error) {
+    // Calculate the likes count for each post
+    const postsWithLikesCount = posts.map((post) => ({
+      ...post,
+      likesCount: post.likes.length,
+    }));
+
+    res.status(200).json(postsWithLikesCount);
+  } catch (error) {
     console.log(error);
-    res.status(500).json({ message: error })
+    res.status(500).json({ message: 'Failed to get posts.' });
   }
-})
+});
 
 router.post('/like/', async (req, res) => {
   try {
@@ -64,7 +89,7 @@ router.post('/like/', async (req, res) => {
       where: { postId },
     });
 
-    res.status(200).json({ likesCount });
+    res.status(200).send(likesCount);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error });
