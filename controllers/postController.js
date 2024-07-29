@@ -89,7 +89,7 @@ router.post('/like', async (req, res) => {
       where: { postId },
     });
 
-    res.status(200).send(likesCount);
+    res.status(200).send({likesCount});
   } catch (error) {
     console.error(error);
     res.status(500).json({ error });
