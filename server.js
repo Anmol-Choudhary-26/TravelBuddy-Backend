@@ -37,9 +37,5 @@ app.use("/post", postRouter);
 app.use('/chat', chatRouter);
 app.use('/bookmark', bookmarkRouter);
 
-app.use((req, res, next) => {
-  const err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
+
 app.listen(8000, () => console.log('app is listening on port 8000.'));
