@@ -24,7 +24,6 @@ model User {
   updatedAt        DateTime        @updatedAt
   block            Boolean         @default(false)
   posts            Post[]
-  chatRooms        chatRoomUsers[]
   msg              msg[]
   bookmarks        Bookmark[]
   replies          Reply[]
@@ -79,7 +78,8 @@ model chatRoom {
   id        String          @id @default(auto()) @map("_id") @db.ObjectId
   createdAt DateTime        @default(now())
   updatedAt DateTime        @updatedAt
-  users     chatRoomUsers[]
+  user1     String
+  user2     String
   message   msg[]
 }
 
@@ -92,16 +92,4 @@ model msg {
   user       User     @relation(fields: [userId], references: [id])
   time       DateTime @default(now())
   received   Boolean  @default(false)
-}
-
-model chatRoomUsers {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  chatRoomId String   @db.ObjectId
-  chatRoom   chatRoom @relation(fields: [chatRoomId], references: [id])
-  userId     String   @db.ObjectId
-  user       User     @relation(fields: [userId], references: [id])
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-
-  @@unique([chatRoomId, userId])
 }
