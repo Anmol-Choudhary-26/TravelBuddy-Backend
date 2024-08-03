@@ -33,9 +33,9 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/getchats", async (req, res) => {
+router.get("/getchats/:userId", async (req, res) => {
   try {
-    const { userId } = req.body;
+    const { userId } = req.params;
     console.log(userId)
 
     const chatRooms = await prisma.chatRoom.findMany({
