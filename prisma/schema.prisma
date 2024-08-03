@@ -79,6 +79,8 @@ model chatRoom {
   createdAt DateTime        @default(now())
   updatedAt DateTime        @updatedAt
   user1     String
+  user1Name String?
+  user2Name String? 
   user2     String
   message   msg[]
 }

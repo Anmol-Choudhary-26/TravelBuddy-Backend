@@ -3,10 +3,9 @@ const router = express.Router();
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
-// Create a new chat room
 router.post("/", async (req, res) => {
   try {
-    const { firstId, secondId } = req.body;
+    const { firstId, firstUserName, secondUserName, secondId } = req.body;
 
     const chat = await prisma.chatRoom.findFirst({
       where: {
@@ -22,6 +21,8 @@ router.post("/", async (req, res) => {
       data: {
         user1: firstId,
         user2: secondId,
+        user1Name: firstUserName,
+        user2Name: secondUserName,
       },
     });
 
@@ -34,7 +35,7 @@ router.post("/", async (req, res) => {
 
 router.get("/getchats", async (req, res) => {
   try {
-    const { userId } = req.query;
+    const { userId } = req.body;
     console.log(userId)
 
     const chatRooms = await prisma.chatRoom.findMany({
@@ -42,13 +43,13 @@ router.get("/getchats", async (req, res) => {
         OR: [{ user1: userId }, { user2: userId }],
       },
     });
-
     res.status(200).json(chatRooms);
   } catch (err) {
     console.error(err);
     res.status(500).json(err);
   }
 });
+
 router.get('/singlechat', async (req, res) => {
   try{
     const { firstId, secondId } = req.body;
@@ -68,5 +69,43 @@ router.get('/singlechat', async (req, res) => {
     res.status(500).json(err);
   }
 })
+
+router.post('/send', async (req, res) => {
+  try {
+  
+    const { userId, roomid, message } = req.body;
+
+    const newMessage = await prisma.msg.create({
+      data: {
+        chatRoomId: roomid,
+        userId: userId,
+        message: message,
+      },
+    });
+
+    res.status(200).json(newMessage);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json(err);
+  }
+});
+
+
+router.get('/messages', async (req, res) => {
+  try {
+    const { chatRoomId } = req.body;
+
+    const messages = await prisma.msg.findMany({
+      where: {
+        chatRoomId: chatRoomId,
+      },
+    });
+
+    res.status(200).json(messages);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json(err);
+  }
+});
 
 export default router;
