@@ -5,7 +5,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 router.post("/", async (req, res) => {
   try {
-    const { firstId, firstUserName, secondUserName, secondId } = req.body;
+    const { firstId, user1Name, user2Name, secondId } = req.body;
 
     const chat = await prisma.chatRoom.findFirst({
       where: {
@@ -21,8 +21,8 @@ router.post("/", async (req, res) => {
       data: {
         user1: firstId,
         user2: secondId,
-        user1Name: firstUserName,
-        user2Name: secondUserName,
+        user1Name,
+        user2Name,
       },
     });
 
