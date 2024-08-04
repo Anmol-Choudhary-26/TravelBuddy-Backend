@@ -36,7 +36,7 @@ router.post("/", async (req, res) => {
 router.get("/getchats/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
-    console.log(userId)
+    console.log(userId);
 
     const chatRooms = await prisma.chatRoom.findMany({
       where: {
@@ -50,8 +50,8 @@ router.get("/getchats/:userId", async (req, res) => {
   }
 });
 
-router.get('/singlechat', async (req, res) => {
-  try{
+router.get("/singlechat", async (req, res) => {
+  try {
     const { firstId, secondId } = req.body;
 
     const chat = await prisma.chatRoom.findFirst({
@@ -63,16 +63,14 @@ router.get('/singlechat', async (req, res) => {
       },
     });
     if (chat) return res.status(200).json(chat);
-  }
-  catch (err) {
+  } catch (err) {
     console.error(err);
     res.status(500).json(err);
   }
-})
+});
 
-router.post('/send', async (req, res) => {
+router.post("/msg", async (req, res) => {
   try {
-  
     const { userId, roomid, message } = req.body;
 
     const newMessage = await prisma.msg.create({
@@ -90,10 +88,9 @@ router.post('/send', async (req, res) => {
   }
 });
 
-
-router.get('/messages', async (req, res) => {
+router.get("/messages", async (req, res) => {
   try {
-    const { chatRoomId } = req.body;
+    const { chatRoomId } = req.params;
 
     const messages = await prisma.msg.findMany({
       where: {
